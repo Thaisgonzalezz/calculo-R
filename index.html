@@ -1,0 +1,36 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Rango de valores para x
+x = np.linspace(-20, 20, 400)
+
+# Ecuación lineal: y = 2x + 3
+y_lineal = 2 * x + 3
+
+# Ecuación cuadrática: y = x^2 - 4x + 1
+y_cuadratica = x**2 - 4 * x + 1
+
+# Crear la figura y los ejes
+plt.figure(figsize=(10, 6))
+
+# Graficar la ecuación lineal
+plt.plot(x, y_lineal, label='Lineal: y = 2x + 3', color='blue')
+
+# Graficar la ecuación cuadrática
+plt.plot(x, y_cuadratica, label='Cuadrática: y = x² - 4x + 1', color='red')
+
+# Límites de la gráfica
+plt.xlim(-20, 20)
+plt.ylim(-50, 450)
+
+# Títulos y leyenda
+plt.title("Ecuaciones Lineal y Cuadrática\nDominio: [-20, 20]")
+plt.xlabel("Dominio (x)")
+plt.ylabel("Rango (y)")
+plt.axhline(0, color='black', linewidth=0.5)
+plt.axvline(0, color='black', linewidth=0.5)
+plt.grid(True)
+plt.legend()
+
+# Mostrar la gráfica
+plt.show()

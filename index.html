@@ -1,36 +1,45 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Rango de valores para x
+# Dominio definido
 x = np.linspace(-20, 20, 400)
 
-# Ecuación lineal: y = 2x + 3
+# Función lineal: y = 2x + 3
 y_lineal = 2 * x + 3
 
-# Ecuación cuadrática: y = x^2 - 4x + 1
+# Función cuadrática: y = x^2 - 4x + 1
 y_cuadratica = x**2 - 4 * x + 1
 
-# Crear la figura y los ejes
+# Calcular rango de cada función dentro del dominio
+rango_lineal = (min(y_lineal), max(y_lineal))
+rango_cuadratica = (min(y_cuadratica), max(y_cuadratica))
+
+# Graficar
 plt.figure(figsize=(10, 6))
-
-# Graficar la ecuación lineal
 plt.plot(x, y_lineal, label='Lineal: y = 2x + 3', color='blue')
-
-# Graficar la ecuación cuadrática
 plt.plot(x, y_cuadratica, label='Cuadrática: y = x² - 4x + 1', color='red')
 
-# Límites de la gráfica
-plt.xlim(-20, 20)
-plt.ylim(-50, 450)
+# Líneas horizontales para marcar los rangos mínimos y máximos
+plt.hlines(rango_lineal, -20, 20, linestyles='dotted', colors='blue', label='Rango Lineal')
+plt.hlines(rango_cuadratica, -20, 20, linestyles='dotted', colors='red', label='Rango Cuadrática')
 
-# Títulos y leyenda
-plt.title("Ecuaciones Lineal y Cuadrática\nDominio: [-20, 20]")
-plt.xlabel("Dominio (x)")
-plt.ylabel("Rango (y)")
+# Título y etiquetas
+plt.title("Funciones Lineal y Cuadrática\nDominio: [-20, 20]")
+plt.xlabel("x (Dominio)")
+plt.ylabel("y (Rango)")
+plt.grid(True)
 plt.axhline(0, color='black', linewidth=0.5)
 plt.axvline(0, color='black', linewidth=0.5)
-plt.grid(True)
-plt.legend()
 
-# Mostrar la gráfica
+# Límites automáticos basados en datos
+plt.xlim(-20, 20)
+plt.ylim(min(min(y_lineal), min(y_cuadratica)) - 10, max(max(y_lineal), max(y_cuadratica)) + 10)
+
+# Mostrar leyenda y gráfico
+plt.legend()
 plt.show()
+
+# Imprimir rangos
+print(f"Rango de la función lineal: {rango_lineal}")
+print(f"Rango de la función cuadrática: {rango_cuadratica}")
+

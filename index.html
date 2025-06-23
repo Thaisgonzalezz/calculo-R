@@ -1,45 +1,98 @@
-import numpy as np
-import matplotlib.pyplot as plt
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Gráfica de Ecuaciones</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.8.0/math.min.js"></script>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    input, button { margin: 10px 0; padding: 8px; width: 100%; }
+    canvas { background: #f9f9f9; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h2>Gráfica de Funciones Lineales y Cuadráticas</h2>
 
-# Dominio definido
-x = np.linspace(-20, 20, 400)
+  <label>Función lineal (ej: 2*x + 3):</label>
+  <input id="lineal" value="2*x + 3">
 
-# Función lineal: y = 2x + 3
-y_lineal = 2 * x + 3
+  <label>Función cuadrática (ej: x^2 - 4*x + 1):</label>
+  <input id="cuadratica" value="x^2 - 4*x + 1">
 
-# Función cuadrática: y = x^2 - 4x + 1
-y_cuadratica = x**2 - 4 * x + 1
+  <button onclick="graficar()">Graficar</button>
 
-# Calcular rango de cada función dentro del dominio
-rango_lineal = (min(y_lineal), max(y_lineal))
-rango_cuadratica = (min(y_cuadratica), max(y_cuadratica))
+  <p id="resultados"></p>
 
-# Graficar
-plt.figure(figsize=(10, 6))
-plt.plot(x, y_lineal, label='Lineal: y = 2x + 3', color='blue')
-plt.plot(x, y_cuadratica, label='Cuadrática: y = x² - 4x + 1', color='red')
+  <canvas id="grafica" width="800" height="400"></canvas>
 
-# Líneas horizontales para marcar los rangos mínimos y máximos
-plt.hlines(rango_lineal, -20, 20, linestyles='dotted', colors='blue', label='Rango Lineal')
-plt.hlines(rango_cuadratica, -20, 20, linestyles='dotted', colors='red', label='Rango Cuadrática')
+  <script>
+    function graficar() {
+      const linealInput = document.getElementById('lineal').value;
+      const cuadraticaInput = document.getElementById('cuadratica').value;
 
-# Título y etiquetas
-plt.title("Funciones Lineal y Cuadrática\nDominio: [-20, 20]")
-plt.xlabel("x (Dominio)")
-plt.ylabel("y (Rango)")
-plt.grid(True)
-plt.axhline(0, color='black', linewidth=0.5)
-plt.axvline(0, color='black', linewidth=0.5)
+      const x = [];
+      const yLineal = [];
+      const yCuadratica = [];
 
-# Límites automáticos basados en datos
-plt.xlim(-20, 20)
-plt.ylim(min(min(y_lineal), min(y_cuadratica)) - 10, max(max(y_lineal), max(y_cuadratica)) + 10)
+      for (let i = -20; i <= 20; i += 0.1) {
+        x.push(i);
+        const scope = { x: i };
+        try {
+          yLineal.push(math.evaluate(linealInput, scope));
+          yCuadratica.push(math.evaluate(cuadraticaInput, scope));
+        } catch (err) {
+          alert("Error en la fórmula. Asegúrate de escribirla correctamente.");
+          return;
+        }
+      }
 
-# Mostrar leyenda y gráfico
-plt.legend()
-plt.show()
+      const minLineal = Math.min(...yLineal).toFixed(2);
+      const maxLineal = Math.max(...yLineal).toFixed(2);
+      const minCuadratica = Math.min(...yCuadratica).toFixed(2);
+      const maxCuadratica = Math.max(...yCuadratica).toFixed(2);
 
-# Imprimir rangos
-print(f"Rango de la función lineal: {rango_lineal}")
-print(f"Rango de la función cuadrática: {rango_cuadratica}")
+      document.getElementById('resultados').innerHTML =
+        `<b>Dominio:</b> [-20, 20]<br>
+         <b>Rango Lineal:</b> [${minLineal}, ${maxLineal}]<br>
+         <b>Rango Cuadrática:</b> [${minCuadratica}, ${maxCuadratica}]`;
 
+      const ctx = document.getElementById('grafica').getContext('2d');
+      if (window.miGrafica) window.miGrafica.destroy(); // Eliminar anterior
+      window.miGrafica = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: x,
+          datasets: [
+            {
+              label: 'Función Lineal',
+              data: yLineal,
+              borderColor: 'blue',
+              borderWidth: 2,
+              fill: false
+            },
+            {
+              label: 'Función Cuadrática',
+              data: yCuadratica,
+              borderColor: 'red',
+              borderWidth: 2,
+              fill: false
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'top' },
+            title: { display: true, text: 'Gráfica de Ecuaciones' }
+          },
+          scales: {
+            x: { title: { display: true, text: 'x' } },
+            y: { title: { display: true, text: 'y' } }
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>
